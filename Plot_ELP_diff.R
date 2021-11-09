@@ -230,7 +230,7 @@ p_cd11b_cd15 = ggplot(dfcomp_cd11b_cd15) +
 
 
 
-grid.arrange(
+LOO_plot_BGLMM = grid.arrange(
   grobs = list(p_foxp3, p_cd3, p_cd8, 
                p_cd11b, p_cd15, p_cd3_foxp3,
                p_cd3_cd8, p_cd11b_cd15),
@@ -239,3 +239,5 @@ grid.arrange(
                         c(4, 5, 6),
                         c(7, 8, NA))
 )
+
+ggsave("LOO_plot_BGLMM.pdf")
