@@ -1,6 +1,24 @@
+# BEFORE RUNNING THIS CODE READ THIS FIRST!!!!
+# This is the third script that needs to be run.
+# This script produces a nice LOO-CV plot from the results stored in the
+# file called "LOO_CV_Results.RData"
+
+# The code is fully annotated and can be run all at once, HOWEVER...
+# Please make sure you change the paths for the files that are read from this file
+# and the files to which we are storing results into.  I STRONGLY suggest you read the 
+# annotations in this code before running it so that you understand what you are doing.
+
+# [1] "total_cells"                   "foxp3_opal_540_positive_cells" "cd3_opal_650_positive_cells"  
+# [4] "cd8_opal_570_positive_cells"   "cd11b_opal_620_positive_cells" "cd15_opal_520_positive_cells" 
+# [7] "cd3plus_foxp3plus_cells"       "cd3plus_cd8plus_cells"         "cd11bplus_cd15plus_cells" 
+
+# This code needs to be run AFTER all the LOO results for all the models have been generated through
+# the script named LooCVscript.R
+
 library(ggplot2)
 library(gridExtra)
 library(dplyr)
+load("LOO_CV_Results.RData")
 dfcomp_foxp3$my_models = rownames(dfcomp_foxp3) 
 dfcomp_foxp3 = dfcomp_foxp3 %>% 
   mutate(the_models = case_when(
