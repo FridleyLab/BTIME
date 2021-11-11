@@ -182,6 +182,15 @@ pre code {
 </ul>
 <div id="instructions" class="section level2">
 <h2>Instructions:</h2>
+<p>First you need to install the following libraries:</p>
+<ul>
+<li><code>rstan</code>: For Hamiltonian MC (will install <code>Rcpp</code> and related libraries)</li>
+<li><code>brms</code>: To build Bayesian GLMMs using <code>rstan</code> as a back end (will install <code>rstan</code> but I strongly recommend you install it in advanced since it is not a trivial installation)</li>
+<li><code>loo</code>: To perform post-processing for model comparison using LOO-CV.</li>
+<li><code>ggplot2</code>: For plotting</li>
+<li><code>gridExtra</code>: For making grid plots</li>
+<li><code>dplyr</code>: For data manipulation.</li>
+</ul>
 <p>The script <code>Auxproc_miF_data_bayesian_models.R</code> needs to be executed first for <strong>every</strong> marker from the following list:</p>
 <ul>
 <li>foxp3_opal_540_positive_cells</li>
@@ -193,8 +202,18 @@ pre code {
 <li>cd3plus_cd8plus_cells</li>
 <li>cd11bplus_cd15plus_cells</li>
 </ul>
-<p>Note that to execute the code above you need to choose which of the markers above (foxp3, cd3, …, etc.) is of your interest. If you want the subsequent scripts to compare the models for ALL markers then you need to go ahead and find/replace the markers on the script with the exact same name you want from the list above.</p>
-<p>When this is done the data files containing the Bayesian GLMMs listed above will be generated and stored in your local folder. After that, execute the script named <code>LooCVscript.R</code> which (using the <code>loo</code> package) will generate comparison between models for each marker and store the results as well. Finally run the script named <code>Plot_ELP_diff.R</code> to produce a nice graphical output/plot of all the models for all the markers called <code>LOO_plot_BGLMM.pdf</code>.</p>
+<p>Note that to execute the code above you need to choose which of the markers above (foxp3, cd3, …, etc.) is of your interest. If you want the subsequent scripts to compare the models for ALL markers then you need to go ahead and find/replace the markers on the script with the exact same name you want from the list above. Once ran for every marker you should have ended with a stored number of files like these:</p>
+<ul>
+<li><code>BRMS_models_foxp3_opal_540_positive_cells.RData</code></li>
+<li><code>BRMS_models_cd3_opal_650_positive_cells.RData</code></li>
+<li><code>BRMS_models_cd8_opal_570_positive_cells.RData</code></li>
+<li><code>BRMS_models_cd11b_opal_620_positive_cells.RData</code></li>
+<li><code>BRMS_models_cd15_opal_520_positive_cells.RData</code></li>
+<li><code>BRMS_models_cd3plus_foxp3plus_cells.RData</code></li>
+<li><code>BRMS_models_cd3plus_cd8plus_cells.RData</code></li>
+<li><code>BRMS_models_cd11bplus_cd15plus_cells.RData</code></li>
+</ul>
+<p>When this is done the data files containing the Bayesian GLMMs listed above will be generated and stored in your local folder. After that, execute the script named <code>LooCVscript.R</code> which (using the <code>loo</code> package) will generate comparison between models for each marker and store the results in a file called <code>LOO_CV_Results.RData</code>. Finally run the script named <code>Plot_ELP_diff.R</code> to produce a nice graphical output/plot of all the models for all the markers called <code>LOO_plot_BGLMM.pdf</code>.</p>
 </div>
 </div>
 
