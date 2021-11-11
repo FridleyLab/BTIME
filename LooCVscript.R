@@ -15,7 +15,8 @@ library("loo")
 # This code needs to be run AFTER all the models have been generated through
 # the script named Auxproc_miF_data_bayesian_models.R
 source("BetaBinomial2Definitions.R")
-load("BRMS_models_foxp3_opal_540_cells.RData")
+load("BRMS_models_foxp3_opal_540_positive_cells.RData")
+
 start_time = Sys.time()
 loo1 = loo(fit1, save_psis = FALSE, cores = 12) #, moment_match = TRUE) crashes de R session.  No solution for this!
 loo2 = loo(fit2, save_psis = FALSE, cores = 12) #, moment_match = TRUE)
@@ -34,7 +35,7 @@ my_time = (end_time - start_time)
 print(my_time)
 dfcomp_foxp3 = as.data.frame(comp)
 
-load("BRMS_models_cd3_opal_650_cells.RData")
+load("BRMS_models_cd3_opal_650_positive_cells.RData")
 start_time = Sys.time()
 loo1 = loo(fit1, save_psis = FALSE, cores = 12) #, moment_match = TRUE) crashes de R session.  No solution for this!
 loo2 = loo(fit2, save_psis = FALSE, cores = 12) #, moment_match = TRUE)
@@ -54,7 +55,7 @@ print(my_time)
 dfcomp_cd3 = as.data.frame(comp)
 
 
-load("BRMS_models_cd8_opal_570_cells.RData")
+load("BRMS_models_cd8_opal_570_positive_cells.RData")
 start_time = Sys.time()
 loo1 = loo(fit1, save_psis = FALSE, cores = 12) #, moment_match = TRUE) crashes de R session.  No solution for this!
 loo2 = loo(fit2, save_psis = FALSE, cores = 12) #, moment_match = TRUE)
@@ -73,7 +74,7 @@ my_time = (end_time - start_time)
 print(my_time)
 dfcomp_cd8 = as.data.frame(comp)
 
-load("BRMS_models_cd11b_opal_620_cells.RData")
+load("BRMS_models_cd11b_opal_620_positive_cells.RData")
 start_time = Sys.time()
 loo1 = loo(fit1, save_psis = FALSE, cores = 12) #, moment_match = TRUE) crashes de R session.  No solution for this!
 loo2 = loo(fit2, save_psis = FALSE, cores = 12) #, moment_match = TRUE)
@@ -92,7 +93,7 @@ my_time = (end_time - start_time)
 print(my_time)
 dfcomp_cd11b = as.data.frame(comp)
 
-load("BRMS_models_cd15_opal_520_cells.RData")
+load("BRMS_models_cd15_opal_520_positive_cells.RData")
 start_time = Sys.time()
 loo1 = loo(fit1, save_psis = FALSE, cores = 12) #, moment_match = TRUE) crashes de R session.  No solution for this!
 loo2 = loo(fit2, save_psis = FALSE, cores = 12) #, moment_match = TRUE)
