@@ -7,19 +7,20 @@
 # annotations in this code before running it so that you understand what you are doing.
 
 # Read the data in:
-dfmif = readRDS("Peres IF_AACES_NCOCS full data 12092020.rds")
-# Subset the data by intratumoral_i_vs_peripheral_p_ == intratumoral only:
-dfmif = subset(dfmif, intratumoral_i_vs_peripheral_p_ == "Intratumoral")
-# process stage variable (this is X = group in my model)
-# remove missing values
-rmlist = which(is.na(dfmif$stage))
-dfmif = dfmif[-rmlist,]
-# now do this as per Brooke/Chris: 1 = Localized, 2 = Regional, and 3 = Distant. Group 1&2 vs 3:
-dfmif$stage_group = as.factor(ifelse(dfmif$stage == "Distant", "Stage 3", "Stage 1 or 2"))
-# My variables (total cells = total tumor + total stroma) go from variables 43:51
-dfvars = as.data.frame(names(dfmif))
-# Need to find/replace the markers below:
-dfvars[43:51,]
+# dfmif = readRDS("Peres IF_AACES_NCOCS full data 12092020.rds")
+dfmif = readRDS("Sample_mIF_data.rds")
+# # Subset the data by intratumoral_i_vs_peripheral_p_ == intratumoral only:
+# dfmif = subset(dfmif, intratumoral_i_vs_peripheral_p_ == "Intratumoral")
+# # process stage variable (this is X = group in my model)
+# # remove missing values
+# rmlist = which(is.na(dfmif$stage))
+# dfmif = dfmif[-rmlist,]
+# # now do this as per Brooke/Chris: 1 = Localized, 2 = Regional, and 3 = Distant. Group 1&2 vs 3:
+# dfmif$stage_group = as.factor(ifelse(dfmif$stage == "Distant", "Stage 3", "Stage 1 or 2"))
+# # My variables (total cells = total tumor + total stroma) go from variables 43:51
+# dfvars = as.data.frame(names(dfmif))
+# # Need to find/replace the markers below:
+# dfvars[43:51,]
 # [1] "total_cells"                   "foxp3_opal_540_positive_cells" "cd3_opal_650_positive_cells"  
 # [4] "cd8_opal_570_positive_cells"   "cd11b_opal_620_positive_cells" "cd15_opal_520_positive_cells" 
 # [7] "cd3plus_foxp3plus_cells"       "cd3plus_cd8plus_cells"         "cd11bplus_cd15plus_cells" 
