@@ -1,0 +1,300 @@
+---
+title: "Stacked results for Stage"
+subtitle: "Bayesian Analyses for mIF data for TIME"
+author: "Jose Laborde"
+date: "`r format(Sys.time(), '%A %B %d, %Y')`"
+output:
+    html_document:
+      toc: true
+      toc_depth: 3
+      toc_float: true
+      df_print: paged
+      theme: lumen
+      number_sections: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Objective
+
+To develop Bayesian models and software for the analysis of mIF data and determination of immune subtypes while accounting for the zero-inflated nature of the immune count data. mIF data often contain many samples in which no cells are positive for a given immune marker (i.e., many zero counts).  Further, TMAs/tissue sections usually contain multiple cores/regions of interest (ROIs) that are correlated with one another as well as different immune cell types that co-localize. Here, we will develop a Bayesian zero-inflated beta-binomial model and an integrated Bayesian clustering approach to determine immune subtypes that leverage both the abundance and the spatial contexture of immune cells while also incorporating the relationship between markers and multiple measurements from a single tumor sample. 
+We developed a Bayesian analysis of multiplex immunofluorescence data with 8 different models with various levels of zero-inflation or over-dispersion modeled:
+
+- `fit1`: Binomial (B)
+- `fit2`: Poisson (P)
+- `fit3`: Negative Binomial (NB)
+- `fit4`: Zero Inflated Binomial (ZIB)
+- `fit5`: Zero Inflated Poisson (ZIP)
+- `fit6`: Zero Inflated Negative Binomial (ZINB)
+- `fit7`: Beta-Binomial (BB)
+- `fit8`: Zero Inflated Beta-Binomial (ZIBB which is still pending for now)
+
+# Data
+We will be using the `Peres IF_AACES_NCOCS full data 12092020.rds` data file which I have and pre-processed stored locally.  This dataset originally lives in the shared folder `smb://hlm/data/lab/Lab_Fridley/bayesTIME/results/`.  Each model above has been ran using [`brms`](https://paul-buerkner.github.io/brms/ "Paul Buerkner's GitHub page").  Here is a small example of how that (larger) dataset looks like:
+
+```{r datablock, message=FALSE}
+dfmif = readRDS("Sample_mIF_data.rds")
+head(dfmif,10)
+```
+
+The Bayesian models ran above have been stored on the files:
+
+- `BRMS_models_foxp3_opal_540_positive_cells.RData`
+- `BRMS_models_cd3_opal_650_positive_cells.RData`
+- `BRMS_models_cd8_opal_570_positive_cells.RData`
+- `BRMS_models_cd11b_opal_620_positive_cells.RData`
+- `BRMS_models_cd15_opal_520_positive_cells.RData`
+- `BRMS_models_cd3plus_foxp3plus_cells.RData`
+- `BRMS_models_cd3plus_cd8plus_cells.RData`
+- `BRMS_models_cd11bplus_cd15plus_cells.RData`
+
+```{r libraries, message=FALSE}
+library(brms)
+library(bayestestR)
+library(bayesplot)
+library(dplyr)
+library(kableExtra)
+library(ggplot2)
+library(tidyverse)
+library(tidybayes)
+```
+
+# Results
+
+## `foxp3_opal_540_positive_cells`
+The contents of the `BRMS_models_foxp3_opal_540_positive_cells.RData` file are:
+
+```{r load-models1, message=FALSE}
+load("BRMS_models_foxp3_opal_540_positive_cells.RData")
+my_vars = as.data.frame(eapply(.GlobalEnv,typeof))
+head(my_vars)
+```
+
+```{r bind-fits1, message=FALSE, warning=FALSE}
+post1 = data.frame(b_stage_groupStage3 = posterior_samples(fit1)$b_stage_groupStage3, model = rep("B", 40000))
+post2 = data.frame(b_stage_groupStage3 = posterior_samples(fit2)$b_stage_groupStage3, model = rep("P", 40000))
+post3 = data.frame(b_stage_groupStage3 = posterior_samples(fit3)$b_stage_groupStage3, model = rep("NB", 40000))
+post4 = data.frame(b_stage_groupStage3 = posterior_samples(fit4)$b_stage_groupStage3, model = rep("ZIB", 40000))
+post5 = data.frame(b_stage_groupStage3 = posterior_samples(fit5)$b_stage_groupStage3, model = rep("ZIP", 40000))
+post6 = data.frame(b_stage_groupStage3 = posterior_samples(fit6)$b_stage_groupStage3, model = rep("ZINB", 40000))
+post7 = data.frame(b_stage_groupStage3 = posterior_samples(fit7)$b_stage_groupStage3, model = rep("BB", 40000))
+posts = rbind(post1,post2,post3,post4,post5,post6,post7) 
+head(posts)
+```
+
+```{r plot-fits1, message=FALSE}
+posts %>% 
+  ggplot(aes(x = b_stage_groupStage3, y = model)) +
+  stat_halfeye()
+```
+<!-- nextpage -->
+
+## `cd3_opal_650_positive_cells`
+The contents of the `BRMS_models_cd3_opal_650_positive_cells.RData` file are:
+
+```{r load-models2, message=FALSE}
+rm(list = ls())
+load("BRMS_models_cd3_opal_650_positive_cells.RData")
+my_vars = as.data.frame(eapply(.GlobalEnv,typeof))
+head(my_vars)
+```
+
+```{r bind-fits2, message=FALSE, warning=FALSE}
+post1 = data.frame(b_stage_groupStage3 = posterior_samples(fit1)$b_stage_groupStage3, model = rep("B", 40000))
+post2 = data.frame(b_stage_groupStage3 = posterior_samples(fit2)$b_stage_groupStage3, model = rep("P", 40000))
+post3 = data.frame(b_stage_groupStage3 = posterior_samples(fit3)$b_stage_groupStage3, model = rep("NB", 40000))
+post4 = data.frame(b_stage_groupStage3 = posterior_samples(fit4)$b_stage_groupStage3, model = rep("ZIB", 40000))
+post5 = data.frame(b_stage_groupStage3 = posterior_samples(fit5)$b_stage_groupStage3, model = rep("ZIP", 40000))
+post6 = data.frame(b_stage_groupStage3 = posterior_samples(fit6)$b_stage_groupStage3, model = rep("ZINB", 40000))
+post7 = data.frame(b_stage_groupStage3 = posterior_samples(fit7)$b_stage_groupStage3, model = rep("BB", 40000))
+posts = rbind(post1,post2,post3,post4,post5,post6,post7) 
+head(posts)
+```
+
+```{r plot-fits2, message=FALSE}
+posts %>% 
+  ggplot(aes(x = b_stage_groupStage3, y = model)) +
+  stat_halfeye()
+```
+
+<!-- nextpage -->
+
+## `cd8_opal_570_positive_cells`
+The contents of the `BRMS_models_cd8_opal_570_positive_cells.RData` file are:
+
+```{r load-models3, message=FALSE}
+rm(list = ls())
+load("BRMS_models_cd8_opal_570_positive_cells.RData")
+my_vars = as.data.frame(eapply(.GlobalEnv,typeof))
+head(my_vars)
+```
+
+```{r bind-fits3, message=FALSE, warning=FALSE}
+post1 = data.frame(b_stage_groupStage3 = posterior_samples(fit1)$b_stage_groupStage3, model = rep("B", 40000))
+post2 = data.frame(b_stage_groupStage3 = posterior_samples(fit2)$b_stage_groupStage3, model = rep("P", 40000))
+post3 = data.frame(b_stage_groupStage3 = posterior_samples(fit3)$b_stage_groupStage3, model = rep("NB", 40000))
+post4 = data.frame(b_stage_groupStage3 = posterior_samples(fit4)$b_stage_groupStage3, model = rep("ZIB", 40000))
+post5 = data.frame(b_stage_groupStage3 = posterior_samples(fit5)$b_stage_groupStage3, model = rep("ZIP", 40000))
+post6 = data.frame(b_stage_groupStage3 = posterior_samples(fit6)$b_stage_groupStage3, model = rep("ZINB", 40000))
+post7 = data.frame(b_stage_groupStage3 = posterior_samples(fit7)$b_stage_groupStage3, model = rep("BB", 40000))
+posts = rbind(post1,post2,post3,post4,post5,post6,post7) 
+head(posts)
+```
+
+```{r plot-fits3, message=FALSE}
+posts %>% 
+  ggplot(aes(x = b_stage_groupStage3, y = model)) +
+  stat_halfeye()
+```
+
+<!-- nextpage -->
+
+## `cd11b_opal_620_positive_cells`
+The contents of the `BRMS_models_cd11b_opal_620_positive_cells.RData` file are:
+
+```{r load-models4, message=FALSE}
+rm(list = ls())
+load("BRMS_models_cd11b_opal_620_positive_cells.RData")
+my_vars = as.data.frame(eapply(.GlobalEnv,typeof))
+head(my_vars)
+```
+
+```{r bind-fits4, message=FALSE, warning=FALSE}
+post1 = data.frame(b_stage_groupStage3 = posterior_samples(fit1)$b_stage_groupStage3, model = rep("B", 40000))
+post2 = data.frame(b_stage_groupStage3 = posterior_samples(fit2)$b_stage_groupStage3, model = rep("P", 40000))
+post3 = data.frame(b_stage_groupStage3 = posterior_samples(fit3)$b_stage_groupStage3, model = rep("NB", 40000))
+post4 = data.frame(b_stage_groupStage3 = posterior_samples(fit4)$b_stage_groupStage3, model = rep("ZIB", 40000))
+post5 = data.frame(b_stage_groupStage3 = posterior_samples(fit5)$b_stage_groupStage3, model = rep("ZIP", 40000))
+post6 = data.frame(b_stage_groupStage3 = posterior_samples(fit6)$b_stage_groupStage3, model = rep("ZINB", 40000))
+post7 = data.frame(b_stage_groupStage3 = posterior_samples(fit7)$b_stage_groupStage3, model = rep("BB", 40000))
+posts = rbind(post1,post2,post3,post4,post5,post6,post7) 
+head(posts)
+```
+
+```{r plot-fits4, message=FALSE}
+posts %>% 
+  ggplot(aes(x = b_stage_groupStage3, y = model)) +
+  stat_halfeye()
+```
+
+<!-- nextpage -->
+
+## `cd15_opal_520_positive_cells`
+The contents of the `BRMS_models_cd15_opal_520_positive_cells.RData` file are:
+
+```{r load-models5, message=FALSE}
+rm(list = ls())
+load("BRMS_models_cd15_opal_520_positive_cells.RData")
+my_vars = as.data.frame(eapply(.GlobalEnv,typeof))
+head(my_vars)
+```
+
+```{r bind-fits5, message=FALSE, warning=FALSE}
+post1 = data.frame(b_stage_groupStage3 = posterior_samples(fit1)$b_stage_groupStage3, model = rep("B", 40000))
+post2 = data.frame(b_stage_groupStage3 = posterior_samples(fit2)$b_stage_groupStage3, model = rep("P", 40000))
+post3 = data.frame(b_stage_groupStage3 = posterior_samples(fit3)$b_stage_groupStage3, model = rep("NB", 40000))
+post4 = data.frame(b_stage_groupStage3 = posterior_samples(fit4)$b_stage_groupStage3, model = rep("ZIB", 40000))
+post5 = data.frame(b_stage_groupStage3 = posterior_samples(fit5)$b_stage_groupStage3, model = rep("ZIP", 40000))
+post6 = data.frame(b_stage_groupStage3 = posterior_samples(fit6)$b_stage_groupStage3, model = rep("ZINB", 40000))
+post7 = data.frame(b_stage_groupStage3 = posterior_samples(fit7)$b_stage_groupStage3, model = rep("BB", 40000))
+posts = rbind(post1,post2,post3,post4,post5,post6,post7) 
+head(posts)
+```
+
+```{r plot-fits5, message=FALSE}
+posts %>% 
+  ggplot(aes(x = b_stage_groupStage3, y = model)) +
+  stat_halfeye()
+```
+
+<!-- nextpage -->
+
+## `cd3plus_foxp3plus_cells`
+The contents of the `BRMS_models_cd3plus_foxp3plus_cells.RData` file are:
+
+```{r load-models6, message=FALSE}
+rm(list = ls())
+load("BRMS_models_cd3plus_foxp3plus_cells.RData")
+my_vars = as.data.frame(eapply(.GlobalEnv,typeof))
+head(my_vars)
+```
+
+```{r bind-fits6, message=FALSE, warning=FALSE}
+post1 = data.frame(b_stage_groupStage3 = posterior_samples(fit1)$b_stage_groupStage3, model = rep("B", 40000))
+post2 = data.frame(b_stage_groupStage3 = posterior_samples(fit2)$b_stage_groupStage3, model = rep("P", 40000))
+post3 = data.frame(b_stage_groupStage3 = posterior_samples(fit3)$b_stage_groupStage3, model = rep("NB", 40000))
+post4 = data.frame(b_stage_groupStage3 = posterior_samples(fit4)$b_stage_groupStage3, model = rep("ZIB", 40000))
+post5 = data.frame(b_stage_groupStage3 = posterior_samples(fit5)$b_stage_groupStage3, model = rep("ZIP", 40000))
+post6 = data.frame(b_stage_groupStage3 = posterior_samples(fit6)$b_stage_groupStage3, model = rep("ZINB", 40000))
+post7 = data.frame(b_stage_groupStage3 = posterior_samples(fit7)$b_stage_groupStage3, model = rep("BB", 40000))
+posts = rbind(post1,post2,post3,post4,post5,post6,post7) 
+head(posts)
+```
+
+```{r plot-fits6, message=FALSE}
+posts %>% 
+  ggplot(aes(x = b_stage_groupStage3, y = model)) +
+  stat_halfeye()
+```
+
+<!-- nextpage -->
+
+## `cd3plus_cd8plus_cells`
+The contents of the `BRMS_models_cd3plus_cd8plus_cells.RData` file are:
+
+```{r load-models7, message=FALSE}
+rm(list = ls())
+load("BRMS_models_cd3plus_cd8plus_cells.RData")
+my_vars = as.data.frame(eapply(.GlobalEnv,typeof))
+head(my_vars)
+```
+
+```{r bind-fits7, message=FALSE, warning=FALSE}
+post1 = data.frame(b_stage_groupStage3 = posterior_samples(fit1)$b_stage_groupStage3, model = rep("B", 40000))
+post2 = data.frame(b_stage_groupStage3 = posterior_samples(fit2)$b_stage_groupStage3, model = rep("P", 40000))
+post3 = data.frame(b_stage_groupStage3 = posterior_samples(fit3)$b_stage_groupStage3, model = rep("NB", 40000))
+post4 = data.frame(b_stage_groupStage3 = posterior_samples(fit4)$b_stage_groupStage3, model = rep("ZIB", 40000))
+post5 = data.frame(b_stage_groupStage3 = posterior_samples(fit5)$b_stage_groupStage3, model = rep("ZIP", 40000))
+post6 = data.frame(b_stage_groupStage3 = posterior_samples(fit6)$b_stage_groupStage3, model = rep("ZINB", 40000))
+post7 = data.frame(b_stage_groupStage3 = posterior_samples(fit7)$b_stage_groupStage3, model = rep("BB", 40000))
+posts = rbind(post1,post2,post3,post4,post5,post6,post7) 
+head(posts)
+```
+
+```{r plot-fits7, message=FALSE}
+posts %>% 
+  ggplot(aes(x = b_stage_groupStage3, y = model)) +
+  stat_halfeye()
+```
+
+<!-- nextpage -->
+
+## `cd11bplus_cd15plus_cells`
+The contents of the `BRMS_models_cd11bplus_cd15plus_cells.RData` file are:
+
+```{r load-models8, message=FALSE}
+rm(list = ls())
+load("BRMS_models_cd11bplus_cd15plus_cells.RData")
+my_vars = as.data.frame(eapply(.GlobalEnv,typeof))
+head(my_vars)
+```
+
+```{r bind-fits8, message=FALSE, warning=FALSE}
+post1 = data.frame(b_stage_groupStage3 = posterior_samples(fit1)$b_stage_groupStage3, model = rep("B", 40000))
+post2 = data.frame(b_stage_groupStage3 = posterior_samples(fit2)$b_stage_groupStage3, model = rep("P", 40000))
+post3 = data.frame(b_stage_groupStage3 = posterior_samples(fit3)$b_stage_groupStage3, model = rep("NB", 40000))
+post4 = data.frame(b_stage_groupStage3 = posterior_samples(fit4)$b_stage_groupStage3, model = rep("ZIB", 40000))
+post5 = data.frame(b_stage_groupStage3 = posterior_samples(fit5)$b_stage_groupStage3, model = rep("ZIP", 40000))
+post6 = data.frame(b_stage_groupStage3 = posterior_samples(fit6)$b_stage_groupStage3, model = rep("ZINB", 40000))
+post7 = data.frame(b_stage_groupStage3 = posterior_samples(fit7)$b_stage_groupStage3, model = rep("BB", 40000))
+posts = rbind(post1,post2,post3,post4,post5,post6,post7) 
+head(posts)
+```
+
+```{r plot-fits8, message=FALSE}
+posts %>% 
+  ggplot(aes(x = b_stage_groupStage3, y = model)) +
+  stat_halfeye()
+```
