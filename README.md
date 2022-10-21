@@ -8,7 +8,7 @@ Bayesian analysis of multiplex immunofluorescence data with 8 different models w
 - `fit5`: Zero Inflated Poisson (ZIP)
 - `fit6`: Zero Inflated Negative Binomial (ZINB)
 - `fit7`: Beta-Binomial (BB)
-- `fit8`: Zero Inflated Beta-Binomial (ZIBB which is still pending for now)
+- `fit8`: Zero Inflated Beta-Binomial (ZIBB)
 
 ## Instructions:
 
@@ -19,9 +19,10 @@ First you need to install the following libraries:
 - `loo`: To perform post-processing for model comparison using LOO-CV.
 - `ggplot2`: For plotting
 - `gridExtra`: For making grid plots
-- `dplyr`: For data manipulation.
+- `dplyr`: For data manipulation
+- `extraDistr`: For using ZIBB distributions.
 
-The script `Auxproc_miF_data_bayesian_models.R` needs to be executed first for **every** marker from the following list:
+The script `miF_data_bayesian_models.R` needs to be executed first for **every** marker from the following list:
 
 - foxp3_opal_540_positive_cells
 - cd3_opal_650_positive_cells

@@ -5,8 +5,7 @@
 
 # The code is fully annotated and can be run all at once, HOWEVER...
 # Please make sure you change the paths for the files that are read from this file
-# and the files to which we are storing results into.  I STRONGLY suggest you read the 
-# annotations in this code before running it so that you understand what you are doing.
+# and the files to which we are storing results into.
 
 # [1] "total_cells"                   "foxp3_opal_540_positive_cells" "cd3_opal_650_positive_cells"  
 # [4] "cd8_opal_570_positive_cells"   "cd11b_opal_620_positive_cells" "cd15_opal_520_positive_cells" 
@@ -28,7 +27,8 @@ dfcomp_foxp3 = dfcomp_foxp3 %>%
     my_models == 'fit4' ~ 'ZIB',
     my_models == 'fit5' ~ 'ZIP',
     my_models == 'fit6' ~ 'ZINB',
-    TRUE ~ 'BB'))
+    my_models == 'fit7' ~ 'BB',
+    TRUE ~ 'ZIBB'))
 dfcomp_cd3$my_models = rownames(dfcomp_cd3) 
 dfcomp_cd3 = dfcomp_cd3 %>% 
   mutate(the_models = case_when(
@@ -38,7 +38,8 @@ dfcomp_cd3 = dfcomp_cd3 %>%
     my_models == 'fit4' ~ 'ZIB',
     my_models == 'fit5' ~ 'ZIP',
     my_models == 'fit6' ~ 'ZINB',
-    TRUE ~ 'BB'))
+    my_models == 'fit7' ~ 'BB',
+    TRUE ~ 'ZIBB'))
 dfcomp_cd8$my_models = rownames(dfcomp_cd8) 
 dfcomp_cd8 = dfcomp_cd8 %>% 
   mutate(the_models = case_when(
@@ -48,7 +49,8 @@ dfcomp_cd8 = dfcomp_cd8 %>%
     my_models == 'fit4' ~ 'ZIB',
     my_models == 'fit5' ~ 'ZIP',
     my_models == 'fit6' ~ 'ZINB',
-    TRUE ~ 'BB'))
+    my_models == 'fit7' ~ 'BB',
+    TRUE ~ 'ZIBB'))
 dfcomp_cd15$my_models = rownames(dfcomp_cd15) 
 dfcomp_cd15 = dfcomp_cd15 %>% 
   mutate(the_models = case_when(
@@ -58,7 +60,8 @@ dfcomp_cd15 = dfcomp_cd15 %>%
     my_models == 'fit4' ~ 'ZIB',
     my_models == 'fit5' ~ 'ZIP',
     my_models == 'fit6' ~ 'ZINB',
-    TRUE ~ 'BB'))
+    my_models == 'fit7' ~ 'BB',
+    TRUE ~ 'ZIBB'))
 dfcomp_cd11b$my_models = rownames(dfcomp_cd11b) 
 dfcomp_cd11b = dfcomp_cd11b %>% 
   mutate(the_models = case_when(
@@ -68,7 +71,8 @@ dfcomp_cd11b = dfcomp_cd11b %>%
     my_models == 'fit4' ~ 'ZIB',
     my_models == 'fit5' ~ 'ZIP',
     my_models == 'fit6' ~ 'ZINB',
-    TRUE ~ 'BB'))
+    my_models == 'fit7' ~ 'BB',
+    TRUE ~ 'ZIBB'))
 dfcomp_cd3_cd8$my_models = rownames(dfcomp_cd3_cd8) 
 dfcomp_cd3_cd8 = dfcomp_cd3_cd8 %>% 
   mutate(the_models = case_when(
@@ -78,7 +82,8 @@ dfcomp_cd3_cd8 = dfcomp_cd3_cd8 %>%
     my_models == 'fit4' ~ 'ZIB',
     my_models == 'fit5' ~ 'ZIP',
     my_models == 'fit6' ~ 'ZINB',
-    TRUE ~ 'BB'))
+    my_models == 'fit7' ~ 'BB',
+    TRUE ~ 'ZIBB'))
 dfcomp_cd3_foxp3$my_models = rownames(dfcomp_cd3_foxp3) 
 dfcomp_cd3_foxp3 = dfcomp_cd3_foxp3 %>% 
   mutate(the_models = case_when(
@@ -88,7 +93,8 @@ dfcomp_cd3_foxp3 = dfcomp_cd3_foxp3 %>%
     my_models == 'fit4' ~ 'ZIB',
     my_models == 'fit5' ~ 'ZIP',
     my_models == 'fit6' ~ 'ZINB',
-    TRUE ~ 'BB'))
+    my_models == 'fit7' ~ 'BB',
+    TRUE ~ 'ZIBB'))
 dfcomp_cd11b_cd15$my_models = rownames(dfcomp_cd11b_cd15) 
 dfcomp_cd11b_cd15 = dfcomp_cd11b_cd15 %>% 
   mutate(the_models = case_when(
@@ -98,156 +104,158 @@ dfcomp_cd11b_cd15 = dfcomp_cd11b_cd15 %>%
     my_models == 'fit4' ~ 'ZIB',
     my_models == 'fit5' ~ 'ZIP',
     my_models == 'fit6' ~ 'ZINB',
-    TRUE ~ 'BB'))
+    my_models == 'fit7' ~ 'BB',
+    TRUE ~ 'ZIBB'))
 
 # FoxP3
 p_foxp3 = ggplot(dfcomp_foxp3) +
   geom_bar(aes(x=reorder(the_models, elpd_diff), y=elpd_diff), 
            stat="identity", 
-           fill="skyblue", 
+           # fill="skyblue", 
            alpha=0.5) +
   geom_errorbar(aes(x=reorder(the_models, elpd_diff), 
                     ymin=elpd_diff-se_diff, ymax=elpd_diff+se_diff), 
                 width=0.4, 
-                colour="orange", 
+                # colour="orange", 
                 alpha=0.9, 
                 size=1.3) +
-  xlab("Models") +
+  xlab("Models") + ylab("Difference in ELPD") +
   ggtitle("FoxP3") +
-  coord_flip()
+  coord_flip() + scale_fill_grey()
 
 # CD3
 p_cd3 = ggplot(dfcomp_cd3) +
   geom_bar(aes(x=reorder(the_models, elpd_diff), y=elpd_diff), 
            stat="identity", 
-           fill="skyblue", 
+           # fill="skyblue", 
            alpha=0.5) +
   geom_errorbar(aes(x=reorder(the_models, elpd_diff), 
                     ymin=elpd_diff-se_diff, ymax=elpd_diff+se_diff), 
                 width=0.4, 
-                colour="orange", 
+                # colour="orange", 
                 alpha=0.9, 
                 size=1.3) +
-  xlab("Models") +
+  xlab("Models") + ylab("Difference in ELPD") +
   ggtitle("CD3") +
-  coord_flip()
+  coord_flip() + scale_fill_grey()
 
 # CD8
 p_cd8 = ggplot(dfcomp_cd8) +
   geom_bar(aes(x=reorder(the_models, elpd_diff), y=elpd_diff), 
            stat="identity", 
-           fill="skyblue", 
+           # fill="skyblue", 
            alpha=0.5) +
   geom_errorbar(aes(x=reorder(the_models, elpd_diff), 
                     ymin=elpd_diff-se_diff, ymax=elpd_diff+se_diff), 
                 width=0.4, 
-                colour="orange", 
+                # colour="orange", 
                 alpha=0.9, 
                 size=1.3) +
-  xlab("Models") +
+  xlab("Models") + ylab("Difference in ELPD") +
   ggtitle("CD8") +
-  coord_flip()
+  coord_flip() + scale_fill_grey()
 
 # CD11b
 p_cd11b = ggplot(dfcomp_cd11b) +
   geom_bar(aes(x=reorder(the_models, elpd_diff), y=elpd_diff), 
            stat="identity", 
-           fill="skyblue", 
+           # fill="skyblue", 
            alpha=0.5) +
   geom_errorbar(aes(x=reorder(the_models, elpd_diff), 
                     ymin=elpd_diff-se_diff, ymax=elpd_diff+se_diff), 
                 width=0.4, 
-                colour="orange", 
+                # colour="orange", 
                 alpha=0.9, 
                 size=1.3) +
-  xlab("Models") +
+  xlab("Models") + ylab("Difference in ELPD") +
   ggtitle("CD11b") +
-  coord_flip()
+  coord_flip() + scale_fill_grey()
 
 # CD15
 p_cd15 = ggplot(dfcomp_cd15) +
   geom_bar(aes(x=reorder(the_models, elpd_diff), y=elpd_diff), 
            stat="identity", 
-           fill="skyblue", 
+           # fill="skyblue", 
            alpha=0.5) +
   geom_errorbar(aes(x=reorder(the_models, elpd_diff), 
                     ymin=elpd_diff-se_diff, ymax=elpd_diff+se_diff), 
                 width=0.4, 
-                colour="orange", 
+                # colour="orange", 
                 alpha=0.9, 
                 size=1.3) +
-  xlab("Models") +
+  xlab("Models") + ylab("Difference in ELPD") +
   ggtitle("CD15") +
-  coord_flip()
+  coord_flip() + scale_fill_grey()
 
 # CD3 + Foxp3
 p_cd3_foxp3 = ggplot(dfcomp_cd3_foxp3) +
   geom_bar(aes(x=reorder(the_models, elpd_diff), y=elpd_diff), 
            stat="identity", 
-           fill="skyblue", 
+           # fill="skyblue", 
            alpha=0.5) +
   geom_errorbar(aes(x=reorder(the_models, elpd_diff), 
                     ymin=elpd_diff-se_diff, ymax=elpd_diff+se_diff), 
                 width=0.4, 
-                colour="orange", 
+                # colour="orange", 
                 alpha=0.9, 
                 size=1.3) +
-  xlab("Models") +
+  xlab("Models") + ylab("Difference in ELPD") +
   ggtitle("CD3 + Foxp3") +
-  coord_flip()
+  coord_flip() + scale_fill_grey()
 
 # CD3 + CD8
 p_cd3_cd8 = ggplot(dfcomp_cd3_cd8) +
   geom_bar(aes(x=reorder(the_models, elpd_diff), y=elpd_diff), 
            stat="identity", 
-           fill="skyblue", 
+           # fill="skyblue", 
            alpha=0.5) +
   geom_errorbar(aes(x=reorder(the_models, elpd_diff), 
                     ymin=elpd_diff-se_diff, ymax=elpd_diff+se_diff), 
                 width=0.4, 
-                colour="orange", 
+                # colour="orange", 
                 alpha=0.9, 
                 size=1.3) +
-  xlab("Models") +
+  xlab("Models") + ylab("Difference in ELPD") +
   ggtitle("CD3 + CD8") +
-  coord_flip()
+  coord_flip() + scale_fill_grey()
 
 # CD11b + CD15
 p_cd11b_cd15 = ggplot(dfcomp_cd11b_cd15) +
   geom_bar(aes(x=reorder(the_models, elpd_diff), y=elpd_diff), 
            stat="identity", 
-           fill="skyblue", 
+           # fill="skyblue", 
            alpha=0.5) +
   geom_errorbar(aes(x=reorder(the_models, elpd_diff), 
                     ymin=elpd_diff-se_diff, ymax=elpd_diff+se_diff), 
                 width=0.4, 
-                colour="orange", 
+                # colour="orange", 
                 alpha=0.9, 
                 size=1.3) +
-  xlab("Models") +
+  xlab("Models") + ylab("Difference in ELPD") +
   ggtitle("CD11b + CD15") +
-  coord_flip()
+  coord_flip() + scale_fill_grey()
 
 
 
-# LOO_plot_BGLMM = grid.arrange(
-#   grobs = list(p_foxp3, p_cd3, p_cd8, 
-#                p_cd11b, p_cd15, p_cd3_foxp3,
-#                p_cd3_cd8, p_cd11b_cd15),
-#   widths = c(1, 1, 1),
-#   layout_matrix = rbind(c(1, 2, 3),
-#                         c(4, 5, 6),
-#                         c(7, 8, NA))
-# )
+LOO_plot_BGLMM = grid.arrange(
+  grobs = list(p_foxp3, p_cd3, p_cd8,
+               p_cd11b, p_cd15, p_cd3_foxp3,
+               p_cd3_cd8, p_cd11b_cd15),
+  widths = c(1, 1),
+  layout_matrix = rbind(c(1, 2),
+                        c(3, 4),
+                        c(5, 6),
+                        c(7, 8))
+)
 
-ggsave("LOO_plot_BGLMM.pdf",
+ggsave("LOO_plot_BGLMM_BW.pdf",
        plot = grid.arrange(
          grobs = list(p_foxp3, p_cd3, p_cd8, 
                       p_cd11b, p_cd15, p_cd3_foxp3,
                       p_cd3_cd8, p_cd11b_cd15),
-         widths = c(1, 1, 1),
-         layout_matrix = rbind(c(1, 2, 3),
-                               c(4, 5, 6),
-                               c(7, 8, NA))
-       ))
-
+         widths = c(1, 1),
+         layout_matrix = rbind(c(1, 2),
+                               c(3, 4),
+                               c(5, 6),
+                               c(7, 8))
+       ), dpi = 800)

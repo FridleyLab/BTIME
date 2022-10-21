@@ -1,3 +1,7 @@
+# This code is deprecated now that we are using library(extraDistr) for BB and ZIBB 
+# distributions and BRMS has been updated as such.  No need to run this for the
+# main code to run
+
 # This is the beta-binomial distribution in mean-precision parameterization
 # Details are provided in
 # https://paul-buerkner.github.io/brms/articles/brms_customfamilies.html
